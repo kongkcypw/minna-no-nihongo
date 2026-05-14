@@ -134,57 +134,25 @@ nav button:hover{color:#667eea;background:#f7f8ff}
   <div class="score-bar">
     <div class="score-num" id="vocab2-score">0/0</div>
     <div class="prog-wrap"><div class="prog-bar" id="vocab2-prog"></div></div>
-    <button class="reset-btn" onclick="resetTab('vocab2')">รีเซ็ต</button>
+    <button class="reset-btn" onclick="resetVocab2()">รีเซ็ต</button>
   </div>
 
-  <div class="sub-head">ไทย → ญี่ปุ่น (เขียนฮิรางานะ)</div>
+  <div class="sub-head">ไทย → ญี่ปุ่น (เลือกฮิรางานะ)</div>
 
-  <div class="card" id="vq11">
-    <div class="qnum">ข้อ 1</div>
-    <div class="qtext">ตื่นนอน (กริยา ます)</div>
-    <input class="txt-inp" id="vq11-i" placeholder="ひらがな">
-    <div class="fb" id="vq11-fb"></div>
-    <button class="check-btn" onclick="chkTxt('vq11','おきます',['おきます'])">ตรวจ</button>
+  <div id="vocab2-card" class="card">
+    <div class="qnum" id="vocab2-qnum"></div>
+    <div id="vocab2-word" style="font-size:1.4rem;font-weight:700;margin:12px 0;color:#2d3748"></div>
+    <div class="opts" id="vocab2-opts" style="margin-top:14px"></div>
+    <div class="fb" id="vocab2-fb"></div>
+    <button class="check-btn" id="vocab2-next" onclick="nextVocab2()"
+            style="display:none;background:#48bb78;margin-top:10px">ข้อถัดไป →</button>
   </div>
 
-  <div class="card" id="vq12">
-    <div class="qnum">ข้อ 2</div>
-    <div class="qtext">รถไฟฟ้า</div>
-    <input class="txt-inp" id="vq12-i" placeholder="ひらがな">
-    <div class="fb" id="vq12-fb"></div>
-    <button class="check-btn" onclick="chkTxt('vq12','でんしゃ',['でんしゃ'])">ตรวจ</button>
-  </div>
-
-  <div class="card" id="vq13">
-    <div class="qnum">ข้อ 3</div>
-    <div class="qtext">อาหารเช้า</div>
-    <input class="txt-inp" id="vq13-i" placeholder="ひらがな">
-    <div class="fb" id="vq13-fb"></div>
-    <button class="check-btn" onclick="chkTxt('vq13','あさごはん',['あさごはん'])">ตรวจ</button>
-  </div>
-
-  <div class="card" id="vq14">
-    <div class="qnum">ข้อ 4</div>
-    <div class="qtext">สัปดาห์ที่แล้ว</div>
-    <input class="txt-inp" id="vq14-i" placeholder="ひらがな">
-    <div class="fb" id="vq14-fb"></div>
-    <button class="check-btn" onclick="chkTxt('vq14','せんしゅう',['せんしゅう'])">ตรวจ</button>
-  </div>
-
-  <div class="card" id="vq15">
-    <div class="qnum">ข้อ 5</div>
-    <div class="qtext">การบ้าน</div>
-    <input class="txt-inp" id="vq15-i" placeholder="ひらがな">
-    <div class="fb" id="vq15-fb"></div>
-    <button class="check-btn" onclick="chkTxt('vq15','しゅくだい',['しゅくだい'])">ตรวจ</button>
-  </div>
-
-  <div class="card" id="vq16">
-    <div class="qnum">ข้อ 6</div>
-    <div class="qtext">วันพุธ</div>
-    <input class="txt-inp" id="vq16-i" placeholder="ひらがな">
-    <div class="fb" id="vq16-fb"></div>
-    <button class="check-btn" onclick="chkTxt('vq16','すいようび',['すいようび'])">ตรวจ</button>
+  <div id="vocab2-done" class="card" style="display:none;text-align:center;padding:24px">
+    <div style="font-size:2.2rem;margin-bottom:8px">🎉</div>
+    <div style="font-size:1.1rem;font-weight:700;color:#276749">ครบทุกคำแล้ว!</div>
+    <div style="color:#4a5568;margin-top:6px" id="vocab2-final"></div>
+    <button class="check-btn" onclick="resetVocab2()" style="margin-top:14px">เริ่มใหม่</button>
   </div>
 </div>
 
@@ -1065,6 +1033,83 @@ function nextVocab1() {
 
 function resetVocab1() { initVocab1(); }
 
+// ==================== VOCAB2 flash card (ไทย→ญี่ปุ่น, 4 choices) ====================
+let v2Queue = [], v2Idx = 0, v2Answered = false;
+
+function initVocab2() {
+  v2Queue = [...vocab1Pool].sort(() => Math.random() - 0.5);
+  v2Idx = 0;
+  v2Answered = false;
+  S.vocab2 = {c:0, t:0, done:new Set()};
+  updScore('vocab2');
+  document.getElementById('vocab2-done').style.display = 'none';
+  document.getElementById('vocab2-card').style.display = 'block';
+  showV2Question();
+}
+
+function showV2Question() {
+  const item = v2Queue[v2Idx];
+  document.getElementById('vocab2-qnum').textContent = 'ข้อ ' + (v2Idx + 1) + '/' + v2Queue.length;
+  document.getElementById('vocab2-word').textContent = item.th;
+  document.getElementById('vocab2-fb').textContent = '';
+  document.getElementById('vocab2-fb').className = 'fb';
+  document.getElementById('vocab2-next').style.display = 'none';
+  v2Answered = false;
+
+  const wrong = vocab1Pool
+    .filter(v => v.jp !== item.jp)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3);
+  const choices = [...wrong, item].sort(() => Math.random() - 0.5);
+
+  const optsEl = document.getElementById('vocab2-opts');
+  optsEl.innerHTML = '';
+  choices.forEach(choice => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.style.fontSize = '1.05rem';
+    btn.textContent = choice.jp;
+    btn.onclick = () => chkVocab2(btn, choice.jp === item.jp, item.jp);
+    optsEl.appendChild(btn);
+  });
+}
+
+function chkVocab2(btn, isCorrect, correctJp) {
+  if (v2Answered) return;
+  v2Answered = true;
+  S.vocab2.t++;
+  const fb = document.getElementById('vocab2-fb');
+  if (isCorrect) {
+    S.vocab2.c++;
+    btn.classList.add('correct');
+    fb.className = 'fb correct';
+    fb.textContent = '✓ ถูกต้อง!';
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#vocab2-opts .opt').forEach(b => {
+      if (b.textContent === correctJp) b.classList.add('show-right');
+    });
+    fb.className = 'fb wrong';
+    fb.textContent = '✗ เฉลย: ' + correctJp;
+  }
+  document.querySelectorAll('#vocab2-opts .opt').forEach(b => b.disabled = true);
+  document.getElementById('vocab2-next').style.display = 'inline-block';
+  updScore('vocab2');
+}
+
+function nextVocab2() {
+  v2Idx++;
+  if (v2Idx >= v2Queue.length) {
+    document.getElementById('vocab2-card').style.display = 'none';
+    document.getElementById('vocab2-done').style.display = 'block';
+    document.getElementById('vocab2-final').textContent = 'คะแนน: ' + S.vocab2.c + '/' + S.vocab2.t + ' คำ';
+    return;
+  }
+  showV2Question();
+}
+
+function resetVocab2() { initVocab2(); }
+
 // Score state
 const S = {
   vocab1:     {c:0,t:0,done:new Set()},
@@ -1228,6 +1273,7 @@ function rev(id) {
 }
 
 initVocab1();
+initVocab2();
 
 function resetTab(sec) {
   S[sec]={c:0,t:0,done:new Set()};
