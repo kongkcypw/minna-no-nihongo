@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แบบฝึกหัดสอบปลายภาค บทที่ 4–6 | みんなの日本語</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI','Noto Sans Thai',sans-serif;background:#f0f4f8;color:#2d3748;min-height:100vh}
+header{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:18px 24px;text-align:center}
+header h1{font-size:1.7rem;margin-bottom:4px}
+header p{opacity:.85;font-size:.9rem}
+nav{background:#fff;border-bottom:2px solid #e2e8f0;display:flex;overflow-x:auto;padding:0 16px;position:sticky;top:0;z-index:10}
+nav button{padding:14px 16px;border:none;background:none;cursor:pointer;font-size:.88rem;color:#718096;border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s}
+nav button.active{color:#667eea;border-bottom-color:#667eea;font-weight:700}
+nav button:hover{color:#667eea;background:#f7f8ff}
+.tab{display:none;padding:24px 16px;max-width:860px;margin:0 auto}
+.tab.active{display:block}
+.score-bar{background:#fff;border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 6px rgba(0,0,0,.07)}
+.score-num{font-size:1.4rem;font-weight:700;color:#667eea;min-width:60px}
+.prog-wrap{flex:1;background:#e2e8f0;border-radius:8px;height:8px}
+.prog-bar{background:linear-gradient(90deg,#667eea,#764ba2);height:100%;border-radius:8px;transition:width .3s;width:0%}
+.reset-btn{padding:7px 16px;background:#e2e8f0;color:#4a5568;border:none;border-radius:7px;cursor:pointer;font-size:.85rem}
+.reset-btn:hover{background:#cbd5e0}
+.sub-head{font-size:.95rem;font-weight:700;color:#667eea;margin:22px 0 12px;display:flex;align-items:center;gap:8px}
+.sub-head::before{content:'';display:block;width:4px;height:16px;background:#667eea;border-radius:2px}
+.card{background:#fff;border-radius:10px;padding:18px 20px;margin-bottom:14px;box-shadow:0 2px 6px rgba(0,0,0,.06);border-left:4px solid #667eea}
+.card.orange{border-left-color:#ed8936}
+.qnum{font-size:.75rem;color:#a0aec0;margin-bottom:6px}
+.qtext{font-size:1.05rem;line-height:1.6}
+.jp{font-size:1.25rem}
+.jp-lg{font-size:1.9rem;letter-spacing:.05em}
+.hint{color:#a0aec0;font-size:.78rem;margin-top:3px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.opt{padding:9px 13px;border:2px solid #e2e8f0;border-radius:8px;background:#fff;cursor:pointer;text-align:left;font-size:.93rem;transition:all .2s}
+.opt:hover{border-color:#667eea;background:#f7f8ff}
+.opt.correct{border-color:#48bb78!important;background:#f0fff4;color:#276749}
+.opt.wrong{border-color:#fc8181!important;background:#fff5f5;color:#9b2c2c}
+.opt.show-right{border-color:#48bb78;background:#f0fff4;color:#276749;opacity:.6}
+.opt:disabled{cursor:default}
+.txt-inp{width:100%;padding:9px 13px;border:2px solid #e2e8f0;border-radius:8px;font-size:.97rem;margin-top:8px;font-family:inherit;transition:border-color .2s}
+.txt-inp:focus{outline:none;border-color:#667eea}
+.txt-inp.correct{border-color:#48bb78;background:#f0fff4}
+.txt-inp.wrong{border-color:#fc8181;background:#fff5f5}
+.fb{margin-top:6px;font-size:.88rem;min-height:18px}
+.fb.correct{color:#276749}
+.fb.wrong{color:#9b2c2c}
+.check-btn{margin-top:10px;padding:7px 18px;background:#667eea;color:#fff;border:none;border-radius:7px;cursor:pointer;font-size:.88rem}
+.check-btn:hover{background:#5a67d8}
+.check-btn:disabled{opacity:.5;cursor:default}
+.reveal-btn{margin-top:8px;padding:7px 16px;background:#ed8936;color:#fff;border:none;border-radius:7px;cursor:pointer;font-size:.85rem}
+.reveal-btn:hover{background:#dd6b20}
+.ans-box{background:#e6fffa;border:1px solid #81e6d9;border-radius:8px;padding:10px 14px;margin-top:8px;font-size:.93rem;color:#234e52;display:none;line-height:1.6}
+.hint-box{background:#fef9e7;border:1px solid #f6d860;border-radius:7px;padding:7px 11px;margin-top:7px;font-size:.82rem;color:#7d5a00}
+.blank-inp{display:inline-block;width:78px;padding:3px 6px;border:2px solid #e2e8f0;border-radius:6px;text-align:center;font-size:.97rem;font-family:inherit;margin:0 3px;transition:border-color .2s;vertical-align:middle}
+.blank-inp:focus{outline:none;border-color:#667eea}
+.blank-inp.correct{border-color:#48bb78;background:#f0fff4}
+.blank-inp.wrong{border-color:#fc8181;background:#fff5f5}
+.ptag{background:#edf2f7;border-radius:7px;padding:9px 14px;margin-bottom:14px;font-size:.9rem;color:#4a5568}
+.verb-opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.vopt{padding:7px 14px;border:2px solid #e2e8f0;border-radius:20px;background:#fff;cursor:pointer;font-size:.9rem;transition:all .2s}
+.vopt:hover{border-color:#667eea;background:#f7f8ff}
+.vopt.correct{border-color:#48bb78;background:#48bb78;color:#fff}
+.vopt.wrong{border-color:#fc8181;background:#fc8181;color:#fff}
+.vopt:disabled{cursor:default}
+.write-area{width:100%;min-height:72px;padding:9px 13px;border:2px solid #e2e8f0;border-radius:8px;font-size:.97rem;margin-top:7px;resize:vertical;font-family:inherit}
+.write-area:focus{outline:none;border-color:#ed8936}
+.info-bar{background:#fff8f0;border:1px solid #fbd38d;border-radius:10px;padding:12px 16px;margin-bottom:18px;font-size:.88rem;color:#744210}
+@media(max-width:560px){.opts{grid-template-columns:1fr}.header h1{font-size:1.3rem}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🎌 แบบฝึกหัดสอบปลายภาค</h1>
+  <p>みんなの日本語 บทที่ 4–6 | Final Exam Practice</p>
+</header>
+<nav>
+  <button class="active" onclick="showTab('vocab1',this)">📚 1. ญี่ปุ่น→ไทย</button>
+  <button onclick="showTab('vocab2',this)">✍️ 2. ไทย→ญี่ปุ่น</button>
+  <button onclick="showTab('vocab3',this)">🀄 3. อ่านคันจิ</button>
+  <button onclick="showTab('sentence',this)">✏️ 4. ประโยค</button>
+  <button onclick="showTab('particle',this)">🔗 5. คำเชื่อม</button>
+  <button onclick="showTab('expression',this)">💬 6. สำนวน</button>
+  <button onclick="showTab('writing',this)">📝 7. เขียนประโยค</button>
+</nav>
+
+<!-- ==================== TAB 1: ญี่ปุ่น→ไทย ==================== -->
+<div id="vocab1" class="tab active">
+  <div class="score-bar">
+    <div class="score-num" id="vocab1-score">0/0</div>
+    <div class="prog-wrap"><div class="prog-bar" id="vocab1-prog"></div></div>
+    <button class="reset-btn" onclick="resetVocab1()">รีเซ็ต</button>
+  </div>
+
+  <div class="sub-head">ญี่ปุ่น → ไทย (พิมพ์คำแปล)</div>
+
+  <div id="vocab1-card" class="card">
+    <div class="qnum" id="vocab1-qnum"></div>
+    <div id="vocab1-word" class="jp-lg" style="margin:12px 0;letter-spacing:.05em"></div>
+    <input class="txt-inp" id="vocab1-inp" placeholder="พิมพ์คำแปลภาษาไทย..." autocomplete="off"
+           onkeydown="if(event.key==='Enter'&&!v1Answered)chkVocab1()">
+    <div class="fb" id="vocab1-fb"></div>
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+      <button class="check-btn" id="vocab1-check" onclick="chkVocab1()">ตรวจ</button>
+      <button class="check-btn" id="vocab1-next" onclick="nextVocab1()"
+              style="display:none;background:#48bb78">ข้อถัดไป →</button>
+    </div>
+  </div>
+
+  <div id="vocab1-done" class="card" style="display:none;text-align:center;padding:24px">
+    <div style="font-size:2.2rem;margin-bottom:8px">🎉</div>
+    <div style="font-size:1.1rem;font-weight:700;color:#276749">ครบทุกคำแล้ว!</div>
+    <div style="color:#4a5568;margin-top:6px" id="vocab1-final"></div>
+    <button class="check-btn" onclick="resetVocab1()" style="margin-top:14px">เริ่มใหม่</button>
+  </div>
+</div>
+
+<!-- ==================== TAB 2: ไทย→ญี่ปุ่น ==================== -->
+<div id="vocab2" class="tab">
+  <div class="score-bar">
+    <div class="score-num" id="vocab2-score">0/0</div>
+    <div class="prog-wrap"><div class="prog-bar" id="vocab2-prog"></div></div>
+    <button class="reset-btn" onclick="resetTab('vocab2')">รีเซ็ต</button>
+  </div>
+
+  <div class="sub-head">ไทย → ญี่ปุ่น (เขียนฮิรางานะ)</div>
+
+  <div class="card" id="vq11">
+    <div class="qnum">ข้อ 1</div>
+    <div class="qtext">ตื่นนอน (กริยา ます)</div>
+    <input class="txt-inp" id="vq11-i" placeholder="ひらがな">
+    <div class="fb" id="vq11-fb"></div>
+    <button class="check-btn" onclick="chkTxt('vq11','おきます',['おきます'])">ตรวจ</button>
+  </div>
+
+  <div class="card" id="vq12">
+    <div class="qnum">ข้อ 2</div>
+    <div class="qtext">รถไฟฟ้า</div>
+    <input class="txt-inp" id="vq12-i" placeholder="ひらがな">
+    <div class="fb" id="vq12-fb"></div>
+    <button class="check-btn" onclick="chkTxt('vq12','でんしゃ',['でんしゃ'])">ตรวจ</button>
+  </div>
+
+  <div class="card" id="vq13">
+    <div class="qnum">ข้อ 3</div>
+    <div class="qtext">อาหารเช้า</div>
+    <input class="txt-inp" id="vq13-i" placeholder="ひらがな">
+    <div class="fb" id="vq13-fb"></div>
+    <button class="check-btn" onclick="chkTxt('vq13','あさごはん',['あさごはん'])">ตรวจ</button>
+  </div>
+
+  <div class="card" id="vq14">
+    <div class="qnum">ข้อ 4</div>
+    <div class="qtext">สัปดาห์ที่แล้ว</div>
+    <input class="txt-inp" id="vq14-i" placeholder="ひらがな">
+    <div class="fb" id="vq14-fb"></div>
+    <button class="check-btn" onclick="chkTxt('vq14','せんしゅう',['せんしゅう'])">ตรวจ</button>
+  </div>
+
+  <div class="card" id="vq15">
+    <div class="qnum">ข้อ 5</div>
+    <div class="qtext">การบ้าน</div>
+    <input class="txt-inp" id="vq15-i" placeholder="ひらがな">
+    <div class="fb" id="vq15-fb"></div>
+    <button class="check-btn" onclick="chkTxt('vq15','しゅくだい',['しゅくだい'])">ตรวจ</button>
+  </div>
+
+  <div class="card" id="vq16">
+    <div class="qnum">ข้อ 6</div>
+    <div class="qtext">วันพุธ</div>
+    <input class="txt-inp" id="vq16-i" placeholder="ひらがな">
+    <div class="fb" id="vq16-fb"></div>
+    <button class="check-btn" onclick="chkTxt('vq16','すいようび',['すいようび'])">ตรวจ</button>
+  </div>
+</div>
+
+<!-- ==================== TAB 3: อ่านคันจิ ==================== -->
+<div id="vocab3" class="tab">
+  <div class="score-bar">
+    <div class="score-num" id="vocab3-score">0/0</div>
+    <div class="prog-wrap"><div class="prog-bar" id="vocab3-prog"></div></div>
+    <button class="reset-btn" onclick="resetTab('vocab3')">รีเซ็ต</button>
+  </div>
+
+  <div class="sub-head">เขียนคำอ่านเป็นฮิรางานะ ⚠️ วันที่ = อ่านแบบวันที่พิเศษ</div>
+
+  <div class="card" id="vq17">
+    <div class="qnum">ข้อ 1</div>
+    <div class="qtext">อ่านตัวคันจิต่อไปนี้:</div>
+    <div class="jp-lg" style="margin:8px 0">今日</div>
+    <input class="txt-inp" id="vq17-i" placeholder="ひらがな">
+    <div class="fb" id="vq17-fb"></div>
+    <button class="check-btn" onclick="chkTxt('vq17','きょう',['きょう'])">ตรวจ</button>
+  </div>
+
+  <div class="card" id="vq18">
+    <div class="qnum">ข้อ 2</div>
+    <div class="qtext">อ่านตัวคันจิต่อไปนี้:</div>
+    <div class="jp-lg" style="margin:8px 0">日本</div>
+    <input class="txt-inp" id="vq18-i" placeholder="ひらがな">
+    <div class="fb" id="vq18-fb"></div>
+    <button class="check-btn" onclick="chkTxt('vq18','にほん',['にほん'])">ตรวจ</button>
+  </div>
+
+  <div class="card" id="vq19">
+    <div class="qnum">ข้อ 3</div>
+    <div class="qtext">อ่านตัวคันจิต่อไปนี้:</div>
+    <div class="jp-lg" style="margin:8px 0">何時</div>
+    <input class="txt-inp" id="vq19-i" placeholder="ひらがな">
+    <div class="fb" id="vq19-fb"></div>
+    <button class="check-btn" onclick="chkTxt('vq19','なんじ',['なんじ'])">ตรวจ</button>
+  </div>
+
+  <div class="card" id="vq20">
+    <div class="qnum">ข้อ 4</div>
+    <div class="qtext">อ่านวันที่ (ใช้การอ่านแบบวันที่ ไม่ใช่การนับ):</div>
+    <div class="jp-lg" style="margin:8px 0">1日</div>
+    <div class="hint-box">💡 วันที่ 1 ของเดือน ≠ いちにち</div>
+    <input class="txt-inp" id="vq20-i" placeholder="ひらがな">
+    <div class="fb" id="vq20-fb"></div>
+    <button class="check-btn" onclick="chkTxt('vq20','ついたち',['ついたち'])">ตรวจ</button>
+  </div>
+
+  <div class="card" id="vq21">
+    <div class="qnum">ข้อ 5</div>
+    <div class="qtext">อ่านวันที่:</div>
+    <div class="jp-lg" style="margin:8px 0">20日</div>
+    <div class="hint-box">💡 วันที่ 20 อ่านพิเศษ</div>
+    <input class="txt-inp" id="vq21-i" placeholder="ひらがな">
+    <div class="fb" id="vq21-fb"></div>
+    <button class="check-btn" onclick="chkTxt('vq21','はつか',['はつか'])">ตรวจ</button>
+  </div>
+
+  <div class="card" id="vq22">
+    <div class="qnum">ข้อ 6</div>
+    <div class="qtext">อ่านวันที่:</div>
+    <div class="jp-lg" style="margin:8px 0">14日</div>
+    <input class="txt-inp" id="vq22-i" placeholder="ひらがな">
+    <div class="fb" id="vq22-fb"></div>
+    <button class="check-btn" onclick="chkTxt('vq22','じゅうよっか',['じゅうよっか'])">ตรวจ</button>
+  </div>
+
+  <div class="card" id="vq23">
+    <div class="qnum">ข้อ 7</div>
+    <div class="qtext">อ่านคันจิ:</div>
+    <div class="jp-lg" style="margin:8px 0">千円</div>
+    <input class="txt-inp" id="vq23-i" placeholder="ひらがな">
+    <div class="fb" id="vq23-fb"></div>
+    <button class="check-btn" onclick="chkTxt('vq23','せんえん',['せんえん'])">ตรวจ</button>
+  </div>
+
+  <div class="card" id="vq24">
+    <div class="qnum">ข้อ 8</div>
+    <div class="qtext">อ่านคันจิ:</div>
+    <div class="jp-lg" style="margin:8px 0">今月</div>
+    <input class="txt-inp" id="vq24-i" placeholder="ひらがな">
+    <div class="fb" id="vq24-fb"></div>
+    <button class="check-btn" onclick="chkTxt('vq24','こんげつ',['こんげつ'])">ตรวจ</button>
+  </div>
+
+  <div class="card" id="vq25">
+    <div class="qnum">ข้อ 9</div>
+    <div class="qtext">อ่านคันจิ:</div>
+    <div class="jp-lg" style="margin:8px 0">休日</div>
+    <input class="txt-inp" id="vq25-i" placeholder="ひらがな">
+    <div class="fb" id="vq25-fb"></div>
+    <button class="check-btn" onclick="chkTxt('vq25','きゅうじつ',['きゅうじつ'])">ตรวจ</button>
+  </div>
+</div>
+
+<!-- ==================== TAB 2: SENTENCE ==================== -->
+<div id="sentence" class="tab">
+  <div class="score-bar">
+    <div class="score-num" id="sentence-score">0/0</div>
+    <div class="prog-wrap"><div class="prog-bar" id="sentence-prog"></div></div>
+    <button class="reset-btn" onclick="resetTab('sentence')">รีเซ็ต</button>
+  </div>
+
+  <div class="sub-head">ก. แปลคำถาม (เขียนแปลเป็นภาษาไทย)</div>
+
+  <div class="card" id="sq1">
+    <div class="qnum">ข้อ 1</div>
+    <div class="qtext jp">いま なんじ ですか。</div>
+    <textarea class="write-area" placeholder="คำแปล..."></textarea>
+    <button class="reveal-btn" onclick="rev('sq1a')">ดูเฉลย</button>
+    <div class="ans-box" id="sq1a">✅ ตอนนี้กี่โมงแล้ว?</div>
+  </div>
+
+  <div class="card" id="sq2">
+    <div class="qnum">ข้อ 2</div>
+    <div class="qtext jp">まいにち なんじに おきますか。</div>
+    <textarea class="write-area" placeholder="คำแปล..."></textarea>
+    <button class="reveal-btn" onclick="rev('sq2a')">ดูเฉลย</button>
+    <div class="ans-box" id="sq2a">✅ ทุกวันตื่นนอนตอนกี่โมง?</div>
+  </div>
+
+  <div class="card" id="sq3">
+    <div class="qnum">ข้อ 3</div>
+    <div class="qtext jp">どこへ いきますか。</div>
+    <textarea class="write-area" placeholder="คำแปล..."></textarea>
+    <button class="reveal-btn" onclick="rev('sq3a')">ดูเฉลย</button>
+    <div class="ans-box" id="sq3a">✅ จะไปที่ไหน?</div>
+  </div>
+
+  <div class="card" id="sq4">
+    <div class="qnum">ข้อ 4</div>
+    <div class="qtext jp">なにを たべますか。</div>
+    <textarea class="write-area" placeholder="คำแปล..."></textarea>
+    <button class="reveal-btn" onclick="rev('sq4a')">ดูเฉลย</button>
+    <div class="ans-box" id="sq4a">✅ จะกินอะไร?</div>
+  </div>
+
+  <div class="card" id="sq5">
+    <div class="qnum">ข้อ 5</div>
+    <div class="qtext jp">たんじょうびは いつですか。</div>
+    <textarea class="write-area" placeholder="คำแปล..."></textarea>
+    <button class="reveal-btn" onclick="rev('sq5a')">ดูเฉลย</button>
+    <div class="ans-box" id="sq5a">✅ วันเกิดคือวันที่เท่าไร? (วันเกิดเมื่อไร?)</div>
+  </div>
+
+  <div class="sub-head">ข. ตอบคำถาม (ตอบเป็นภาษาญี่ปุ่น)</div>
+
+  <div class="card" id="sq6">
+    <div class="qnum">ข้อ 6</div>
+    <div class="qtext jp">ぎんこうは なんじから なんじまで ですか。</div>
+    <div class="hint-box">💡 ธนาคารเปิด 9:00–15:00 | รูป: ～時から ～時まで です</div>
+    <textarea class="write-area" placeholder="ตอบภาษาญี่ปุ่น..."></textarea>
+    <button class="reveal-btn" onclick="rev('sq6a')">ดูเฉลย</button>
+    <div class="ans-box" id="sq6a">✅ ９時から ３時まで です。</div>
+  </div>
+
+  <div class="card" id="sq7">
+    <div class="qnum">ข้อ 7</div>
+    <div class="qtext jp">きのう どこへ いきましたか。</div>
+    <div class="hint-box">💡 รูป: ～へ いきました。 หรือ どこへも いきませんでした。</div>
+    <textarea class="write-area" placeholder="ตอบภาษาญี่ปุ่น..."></textarea>
+    <button class="reveal-btn" onclick="rev('sq7a')">ดูเฉลย</button>
+    <div class="ans-box" id="sq7a">✅ ตัวอย่าง: としょかんへ いきました。<br>หรือ: どこへも いきませんでした。</div>
+  </div>
+
+  <div class="card" id="sq8">
+    <div class="qnum">ข้อ 8</div>
+    <div class="qtext jp">なにで がっこうへ きますか。</div>
+    <div class="hint-box">💡 รูป: ～で きます。</div>
+    <textarea class="write-area" placeholder="ตอบภาษาญี่ปุ่น..."></textarea>
+    <button class="reveal-btn" onclick="rev('sq8a')">ดูเฉลย</button>
+    <div class="ans-box" id="sq8a">✅ ตัวอย่าง: バスで きます。 / でんしゃで きます。<br>เดิน: えきから あるいて きます。</div>
+  </div>
+
+  <div class="card" id="sq9">
+    <div class="qnum">ข้อ 9</div>
+    <div class="qtext jp">まいあさ なにを たべますか。</div>
+    <div class="hint-box">💡 รูป: ～を たべます。</div>
+    <textarea class="write-area" placeholder="ตอบภาษาญี่ปุ่น..."></textarea>
+    <button class="reveal-btn" onclick="rev('sq9a')">ดูเฉลย</button>
+    <div class="ans-box" id="sq9a">✅ ตัวอย่าง: パンと たまごを たべます。<br>หรือ: なにも たべません。</div>
+  </div>
+
+  <div class="card" id="sq10">
+    <div class="qnum">ข้อ 10</div>
+    <div class="qtext jp">にちようびに なにを しましたか。</div>
+    <div class="hint-box">💡 รูป: ～を しました。 | กิจกรรม: テニス、サッカー、えいが、かいもの</div>
+    <textarea class="write-area" placeholder="ตอบภาษาญี่ปุ่น..."></textarea>
+    <button class="reveal-btn" onclick="rev('sq10a')">ดูเฉลย</button>
+    <div class="ans-box" id="sq10a">✅ ตัวอย่าง: テニスを しました。<br>หรือ: ともだちと えいがを みました。</div>
+  </div>
+
+  <div class="sub-head">ค. เลือกคำตอบที่ถูกต้อง</div>
+
+  <div class="card" id="sq11">
+    <div class="qnum">ข้อ 11</div>
+    <div class="qtext">"ฉันเดินทางมาโดยรถไฟ" ประโยคใดถูก?</div>
+    <div class="opts">
+      <button class="opt" onclick="mc('sq11',this,false)">でんしゃに きました。</button>
+      <button class="opt" onclick="mc('sq11',this,true)">でんしゃで きました。</button>
+      <button class="opt" onclick="mc('sq11',this,false)">でんしゃへ きました。</button>
+      <button class="opt" onclick="mc('sq11',this,false)">でんしゃを きました。</button>
+    </div>
+  </div>
+
+  <div class="card" id="sq12">
+    <div class="qnum">ข้อ 12</div>
+    <div class="qtext">"ทำงานตั้งแต่ 9 โมงถึง 5 โมง" ประโยคใดถูก?</div>
+    <div class="opts">
+      <button class="opt" onclick="mc('sq12',this,false)">９時と ５時に はたらきます。</button>
+      <button class="opt" onclick="mc('sq12',this,true)">９時から ５時まで はたらきます。</button>
+      <button class="opt" onclick="mc('sq12',this,false)">９時まで ５時から はたらきます。</button>
+      <button class="opt" onclick="mc('sq12',this,false)">９時に ５時へ はたらきます。</button>
+    </div>
+  </div>
+
+  <div class="card" id="sq13">
+    <div class="qnum">ข้อ 13</div>
+    <div class="qtext">"ฉันไปกับครอบครัว" ประโยคใดถูก?</div>
+    <div class="opts">
+      <button class="opt" onclick="mc('sq13',this,false)">かぞくを いきます。</button>
+      <button class="opt" onclick="mc('sq13',this,false)">かぞくへ いきます。</button>
+      <button class="opt" onclick="mc('sq13',this,true)">かぞくと いきます。</button>
+      <button class="opt" onclick="mc('sq13',this,false)">かぞくで いきます。</button>
+    </div>
+  </div>
+
+  <div class="card" id="sq14">
+    <div class="qnum">ข้อ 14</div>
+    <div class="qtext">"วันเสาร์ฉันไม่ไปไหนเลย" ประโยคใดถูก?</div>
+    <div class="opts">
+      <button class="opt" onclick="mc('sq14',this,false)">どようびに どこへ いきません。</button>
+      <button class="opt" onclick="mc('sq14',this,true)">どようびに どこへも いきません。</button>
+      <button class="opt" onclick="mc('sq14',this,false)">どようびに なにも いきません。</button>
+      <button class="opt" onclick="mc('sq14',this,false)">どようびに だれも いきません。</button>
+    </div>
+  </div>
+
+  <div class="card" id="sq15">
+    <div class="qnum">ข้อ 15</div>
+    <div class="qtext">"มาถามว่าวันนี้กินอะไร?" ประโยคใดถูก?</div>
+    <div class="opts">
+      <button class="opt" onclick="mc('sq15',this,false)">きょう なにが たべますか。</button>
+      <button class="opt" onclick="mc('sq15',this,true)">きょう なにを たべますか。</button>
+      <button class="opt" onclick="mc('sq15',this,false)">きょう なにで たべますか。</button>
+      <button class="opt" onclick="mc('sq15',this,false)">きょう なにに たべますか。</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 3: PARTICLES ==================== -->
+<div id="particle" class="tab">
+  <div class="score-bar">
+    <div class="score-num" id="particle-score">0/0</div>
+    <div class="prog-wrap"><div class="prog-bar" id="particle-prog"></div></div>
+    <button class="reset-btn" onclick="resetTab('particle')">รีเซ็ต</button>
+  </div>
+
+  <div class="ptag">📌 คำช่วยที่ต้องเลือก: <strong>に、へ、で、を、と、から、まで、も</strong></div>
+
+  <div class="card" id="pq1">
+    <div class="qnum">ข้อ 1 — บอกเวลา</div>
+    <div class="qtext jp" style="line-height:2.2">
+      わたしは まいあさ ７時
+      <input class="blank-inp" id="pq1-i" placeholder="">
+      おきます。
+    </div>
+    <div class="fb" id="pq1-fb"></div>
+    <button class="check-btn" onclick="chkP('pq1','に',['に'])">ตรวจ</button>
+    <button class="reveal-btn" onclick="rev('pq1a')">ดูเฉลย</button>
+    <div class="ans-box" id="pq1a">✅ <strong>に</strong> — บอกเวลาที่ทำกิจกรรม (7時に)</div>
+  </div>
+
+  <div class="card" id="pq2">
+    <div class="qnum">ข้อ 2 — ทิศทาง/ปลายทาง</div>
+    <div class="qtext jp" style="line-height:2.2">
+      きのう がっこう
+      <input class="blank-inp" id="pq2-i" placeholder="">
+      いきました。
+    </div>
+    <div class="fb" id="pq2-fb"></div>
+    <button class="check-btn" onclick="chkP('pq2','へ',['へ','に'])">ตรวจ</button>
+    <button class="reveal-btn" onclick="rev('pq2a')">ดูเฉลย</button>
+    <div class="ans-box" id="pq2a">✅ <strong>へ</strong> (หรือ に) — บอกทิศทาง/ปลายทาง</div>
+  </div>
+
+  <div class="card" id="pq3">
+    <div class="qnum">ข้อ 3 — ยานพาหนะ</div>
+    <div class="qtext jp" style="line-height:2.2">
+      でんしゃ
+      <input class="blank-inp" id="pq3-i" placeholder="">
+      かいしゃへ いきます。
+    </div>
+    <div class="fb" id="pq3-fb"></div>
+    <button class="check-btn" onclick="chkP('pq3','で',['で'])">ตรวจ</button>
+    <button class="reveal-btn" onclick="rev('pq3a')">ดูเฉลย</button>
+    <div class="ans-box" id="pq3a">✅ <strong>で</strong> — บอกยานพาหนะ/วิธีการเดินทาง</div>
+  </div>
+
+  <div class="card" id="pq4">
+    <div class="qnum">ข้อ 4 — กรรมของกริยา</div>
+    <div class="qtext jp" style="line-height:2.2">
+      コーヒー
+      <input class="blank-inp" id="pq4-i" placeholder="">
+      のみます。
+    </div>
+    <div class="fb" id="pq4-fb"></div>
+    <button class="check-btn" onclick="chkP('pq4','を',['を'])">ตรวจ</button>
+    <button class="reveal-btn" onclick="rev('pq4a')">ดูเฉลย</button>
+    <div class="ans-box" id="pq4a">✅ <strong>を</strong> — กรรมของกริยา (กริยาสกรรม)</div>
+  </div>
+
+  <div class="card" id="pq5">
+    <div class="qnum">ข้อ 5 — ทำร่วมกับใคร</div>
+    <div class="qtext jp" style="line-height:2.2">
+      ともだち
+      <input class="blank-inp" id="pq5-i" placeholder="">
+      えいがを みました。
+    </div>
+    <div class="fb" id="pq5-fb"></div>
+    <button class="check-btn" onclick="chkP('pq5','と',['と'])">ตรวจ</button>
+    <button class="reveal-btn" onclick="rev('pq5a')">ดูเฉลย</button>
+    <div class="ans-box" id="pq5a">✅ <strong>と</strong> — ทำร่วมกับบุคคล</div>
+  </div>
+
+  <div class="card" id="pq6">
+    <div class="qnum">ข้อ 6 — ช่วงเวลา (2 ช่อง)</div>
+    <div class="qtext jp" style="line-height:2.2">
+      ぎんこうは ９時
+      <input class="blank-inp" id="pq6-i" placeholder="" style="width:60px">
+      ３時
+      <input class="blank-inp" id="pq6-i2" placeholder="" style="width:60px">
+      です。
+    </div>
+    <div class="fb" id="pq6-fb"></div>
+    <button class="check-btn" onclick="chkP2('pq6','から','まで',['から'],['まで'])">ตรวจ</button>
+    <button class="reveal-btn" onclick="rev('pq6a')">ดูเฉลย</button>
+    <div class="ans-box" id="pq6a">✅ <strong>から</strong> / <strong>まで</strong> — ตั้งแต่...ถึง...</div>
+  </div>
+
+  <div class="card" id="pq7">
+    <div class="qnum">ข้อ 7 — ไม่ไปไหนเลย</div>
+    <div class="qtext jp" style="line-height:2.2">
+      どこへ
+      <input class="blank-inp" id="pq7-i" placeholder="">
+      いきませんでした。
+    </div>
+    <div class="fb" id="pq7-fb"></div>
+    <button class="check-btn" onclick="chkP('pq7','も',['も'])">ตรวจ</button>
+    <button class="reveal-btn" onclick="rev('pq7a')">ดูเฉลย</button>
+    <div class="ans-box" id="pq7a">✅ <strong>も</strong> — どこへ<strong>も</strong> + กริยาปฏิเสธ = ไม่ไปไหนเลย</div>
+  </div>
+
+  <div class="card" id="pq8">
+    <div class="qnum">ข้อ 8 — สถานที่ออกเดินทาง</div>
+    <div class="qtext jp" style="line-height:2.2">
+      えき
+      <input class="blank-inp" id="pq8-i" placeholder="">
+      あるいて かえりました。
+    </div>
+    <div class="fb" id="pq8-fb"></div>
+    <button class="check-btn" onclick="chkP('pq8','から',['から'])">ตรวจ</button>
+    <button class="reveal-btn" onclick="rev('pq8a')">ดูเฉลย</button>
+    <div class="ans-box" id="pq8a">✅ <strong>から</strong> — จากสถานี (จุดเริ่มต้น)</div>
+  </div>
+
+  <div class="card" id="pq9">
+    <div class="qnum">ข้อ 9 — สถานที่ทำกิจกรรม</div>
+    <div class="qtext jp" style="line-height:2.2">
+      としょかん
+      <input class="blank-inp" id="pq9-i" placeholder="">
+      ほんを よみます。
+    </div>
+    <div class="fb" id="pq9-fb"></div>
+    <button class="check-btn" onclick="chkP('pq9','で',['で'])">ตรวจ</button>
+    <button class="reveal-btn" onclick="rev('pq9a')">ดูเฉลย</button>
+    <div class="ans-box" id="pq9a">✅ <strong>で</strong> — บอกสถานที่ที่ทำกิจกรรม</div>
+  </div>
+
+  <div class="card" id="pq10">
+    <div class="qnum">ข้อ 10 — กรรมของ します</div>
+    <div class="qtext jp" style="line-height:2.2">
+      きのう なに
+      <input class="blank-inp" id="pq10-i" placeholder="">
+      しましたか。
+    </div>
+    <div class="fb" id="pq10-fb"></div>
+    <button class="check-btn" onclick="chkP('pq10','を',['を'])">ตรวจ</button>
+    <button class="reveal-btn" onclick="rev('pq10a')">ดูเฉลย</button>
+    <div class="ans-box" id="pq10a">✅ <strong>を</strong> — กรรมของกริยา します (なにをしましたか)</div>
+  </div>
+</div>
+
+<!-- ==================== TAB 4: EXPRESSION ==================== -->
+<div id="expression" class="tab">
+  <div class="score-bar">
+    <div class="score-num" id="expression-score">0/0</div>
+    <div class="prog-wrap"><div class="prog-bar" id="expression-prog"></div></div>
+    <button class="reset-btn" onclick="resetTab('expression')">รีเซ็ต</button>
+  </div>
+
+  <div class="ptag">📌 รูปกริยา: <strong>ます</strong> (ปัจจุบัน/อนาคต บอกเล่า) | <strong>ません</strong> (ปัจจุบัน ปฏิเสธ) | <strong>ました</strong> (อดีต บอกเล่า) | <strong>ませんでした</strong> (อดีต ปฏิเสธ)<br>สำนวน: <strong>～ませんか</strong> (ชวน) | <strong>～ましょう</strong> (เสนอ/ตกลง)</div>
+
+  <div class="sub-head">เลือกรูปกริยาหรือสำนวนที่เหมาะสม</div>
+
+  <div class="card" id="eq1">
+    <div class="qnum">ข้อ 1</div>
+    <div class="qtext">เติมรูปกริยาที่ถูกต้อง:<br>
+    <span class="jp">きのう べんきょう___________。</span><br>
+    (เมื่อวานฉัน<strong>เรียน</strong>แล้ว)</div>
+    <div class="verb-opts" id="eq1-o">
+      <button class="vopt" onclick="vf('eq1',this,false)">します</button>
+      <button class="vopt" onclick="vf('eq1',this,false)">しません</button>
+      <button class="vopt" onclick="vf('eq1',this,true)">しました</button>
+      <button class="vopt" onclick="vf('eq1',this,false)">しませんでした</button>
+    </div>
+    <div class="fb" id="eq1-fb"></div>
+  </div>
+
+  <div class="card" id="eq2">
+    <div class="qnum">ข้อ 2</div>
+    <div class="qtext">เติมรูปกริยาที่ถูกต้อง:<br>
+    <span class="jp">あした ９時に おき___________。</span><br>
+    (พรุ่งนี้จะ<strong>ตื่นนอน</strong>ตอน 9 โมง)</div>
+    <div class="verb-opts" id="eq2-o">
+      <button class="vopt" onclick="vf('eq2',this,true)">ます</button>
+      <button class="vopt" onclick="vf('eq2',this,false)">ません</button>
+      <button class="vopt" onclick="vf('eq2',this,false)">ました</button>
+      <button class="vopt" onclick="vf('eq2',this,false)">ませんでした</button>
+    </div>
+    <div class="fb" id="eq2-fb"></div>
+  </div>
+
+  <div class="card" id="eq3">
+    <div class="qnum">ข้อ 3</div>
+    <div class="qtext">เติมรูปกริยาที่ถูกต้อง:<br>
+    <span class="jp">けさ あさごはんを たべ___________。</span><br>
+    (เมื่อเช้า<strong>ไม่ได้กิน</strong>อาหารเช้า)</div>
+    <div class="verb-opts" id="eq3-o">
+      <button class="vopt" onclick="vf('eq3',this,false)">ます</button>
+      <button class="vopt" onclick="vf('eq3',this,false)">ません</button>
+      <button class="vopt" onclick="vf('eq3',this,false)">ました</button>
+      <button class="vopt" onclick="vf('eq3',this,true)">ませんでした</button>
+    </div>
+    <div class="fb" id="eq3-fb"></div>
+  </div>
+
+  <div class="card" id="eq4">
+    <div class="qnum">ข้อ 4</div>
+    <div class="qtext">เติมรูปกริยาที่ถูกต้อง:<br>
+    <span class="jp">わたしは たばこを すい___________。</span><br>
+    (ฉัน<strong>ไม่สูบ</strong>บุหรี่ [ปัจจุบัน])</div>
+    <div class="verb-opts" id="eq4-o">
+      <button class="vopt" onclick="vf('eq4',this,false)">ます</button>
+      <button class="vopt" onclick="vf('eq4',this,true)">ません</button>
+      <button class="vopt" onclick="vf('eq4',this,false)">ました</button>
+      <button class="vopt" onclick="vf('eq4',this,false)">ませんでした</button>
+    </div>
+    <div class="fb" id="eq4-fb"></div>
+  </div>
+
+  <div class="card" id="eq5">
+    <div class="qnum">ข้อ 5</div>
+    <div class="qtext">เลือกสำนวนที่ถูกต้องสำหรับ <strong>"ชวนไปดูภาพยนตร์ด้วยกัน"</strong></div>
+    <div class="opts">
+      <button class="opt" onclick="mc('eq5',this,false)">えいがを みます。</button>
+      <button class="opt" onclick="mc('eq5',this,false)">えいがを みました。</button>
+      <button class="opt" onclick="mc('eq5',this,true)">いっしょに えいがを みませんか。</button>
+      <button class="opt" onclick="mc('eq5',this,false)">いっしょに えいがを みましょうか。</button>
+    </div>
+  </div>
+
+  <div class="card" id="eq6">
+    <div class="qnum">ข้อ 6</div>
+    <div class="qtext">เลือกสำนวนที่ถูกต้องสำหรับ <strong>"มาพักกันสักครู่เถอะ"</strong></div>
+    <div class="opts">
+      <button class="opt" onclick="mc('eq6',this,false)">ちょっと やすみますか。</button>
+      <button class="opt" onclick="mc('eq6',this,true)">ちょっと やすみましょう。</button>
+      <button class="opt" onclick="mc('eq6',this,false)">ちょっと やすみません。</button>
+      <button class="opt" onclick="mc('eq6',this,false)">ちょっと やすみませんでした。</button>
+    </div>
+  </div>
+
+  <div class="card" id="eq7">
+    <div class="qnum">ข้อ 7</div>
+    <div class="qtext">เติมรูปกริยาที่ถูกต้อง:<br>
+    <span class="jp">せんしゅう にほんへ き___________。</span><br>
+    (สัปดาห์ที่แล้ว<strong>มา</strong>ญี่ปุ่น [อดีต])</div>
+    <div class="verb-opts" id="eq7-o">
+      <button class="vopt" onclick="vf('eq7',this,false)">ます</button>
+      <button class="vopt" onclick="vf('eq7',this,false)">ません</button>
+      <button class="vopt" onclick="vf('eq7',this,true)">ました</button>
+      <button class="vopt" onclick="vf('eq7',this,false)">ませんでした</button>
+    </div>
+    <div class="fb" id="eq7-fb"></div>
+  </div>
+
+  <div class="card" id="eq8">
+    <div class="qnum">ข้อ 8</div>
+    <div class="qtext">เติมรูปกริยาที่ถูกต้อง:<br>
+    <span class="jp">らいしゅう おおさかへ い___________。</span><br>
+    (สัปดาห์หน้าจะ<strong>ไป</strong>โอซาก้า)</div>
+    <div class="verb-opts" id="eq8-o">
+      <button class="vopt" onclick="vf('eq8',this,true)">きます</button>
+      <button class="vopt" onclick="vf('eq8',this,false)">きません</button>
+      <button class="vopt" onclick="vf('eq8',this,false)">きました</button>
+      <button class="vopt" onclick="vf('eq8',this,false)">きませんでした</button>
+    </div>
+    <div class="hint-box">💡 おおさかへ い___ → คำกริยา いきます</div>
+    <div class="fb" id="eq8-fb"></div>
+  </div>
+
+  <div class="card" id="eq9">
+    <div class="qnum">ข้อ 9</div>
+    <div class="qtext">เลือกสำนวนที่ถูกต้อง: ตอบรับคำชวนที่ว่า <span class="jp">いっしょに ひるごはんを たべませんか。</span></div>
+    <div class="opts">
+      <button class="opt" onclick="mc('eq9',this,false)">いいえ、たべません。</button>
+      <button class="opt" onclick="mc('eq9',this,false)">はい、たべませんでした。</button>
+      <button class="opt" onclick="mc('eq9',this,true)">ええ、たべましょう。</button>
+      <button class="opt" onclick="mc('eq9',this,false)">はい、たべますか。</button>
+    </div>
+  </div>
+
+  <div class="card" id="eq10">
+    <div class="qnum">ข้อ 10</div>
+    <div class="qtext">เลือกประโยคที่ถูกต้อง: <strong>"ฉันไม่ได้ไปโตเกียวเมื่อวาน"</strong></div>
+    <div class="opts">
+      <button class="opt" onclick="mc('eq10',this,false)">きのう とうきょうへ いきます。</button>
+      <button class="opt" onclick="mc('eq10',this,false)">きのう とうきょうへ いきません。</button>
+      <button class="opt" onclick="mc('eq10',this,true)">きのう とうきょうへ いきませんでした。</button>
+      <button class="opt" onclick="mc('eq10',this,false)">きのう とうきょうへ いきました。</button>
+    </div>
+  </div>
+
+  <div class="card" id="eq11">
+    <div class="qnum">ข้อ 11</div>
+    <div class="qtext">เติมรูปกริยาที่ถูกต้อง:<br>
+    <span class="jp">まいにち コーヒーを のみ___________。</span><br>
+    (ทุกวัน<strong>ดื่ม</strong>กาแฟ [ปัจจุบัน บอกเล่า])</div>
+    <div class="verb-opts" id="eq11-o">
+      <button class="vopt" onclick="vf('eq11',this,true)">ます</button>
+      <button class="vopt" onclick="vf('eq11',this,false)">ません</button>
+      <button class="vopt" onclick="vf('eq11',this,false)">ました</button>
+      <button class="vopt" onclick="vf('eq11',this,false)">ませんでした</button>
+    </div>
+    <div class="fb" id="eq11-fb"></div>
+  </div>
+
+  <div class="card" id="eq12">
+    <div class="qnum">ข้อ 12</div>
+    <div class="qtext">เลือกประโยคที่ถูกต้อง: <strong>"ซื้อของที่ร้านค้า"</strong></div>
+    <div class="opts">
+      <button class="opt" onclick="mc('eq12',this,false)">みせに かいます。</button>
+      <button class="opt" onclick="mc('eq12',this,false)">みせへ かいます。</button>
+      <button class="opt" onclick="mc('eq12',this,true)">みせで かいます。</button>
+      <button class="opt" onclick="mc('eq12',this,false)">みせを かいます。</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TAB 5: WRITING ==================== -->
+<div id="writing" class="tab">
+  <div class="info-bar">📝 แบบฝึกหัดเขียนประโยคภาษาญี่ปุ่น — เขียนแล้วกด "ดูเฉลย" เพื่อตรวจด้วยตัวเอง</div>
+
+  <div class="sub-head">เขียนประโยคเกี่ยวกับ วัน เวลา และกิจกรรม</div>
+
+  <div class="card orange">
+    <div class="qnum">ข้อ 1 — บอกเวลา</div>
+    <div class="qtext"><strong>"ตอนนี้ 8 โมง 30 นาที"</strong></div>
+    <div class="hint-box">💡 โครงสร้าง: いま ～時 ～分 です | ครึ่ง = 半(はん)</div>
+    <textarea class="write-area" placeholder="เขียนภาษาญี่ปุ่น..."></textarea>
+    <button class="reveal-btn" onclick="rev('wa1')">ดูเฉลย</button>
+    <div class="ans-box" id="wa1">✅ いま ８時 ３０分 です。<br>หรือ: いま ８時半 です。</div>
+  </div>
+
+  <div class="card orange">
+    <div class="qnum">ข้อ 2 — กิจกรรมในอดีต</div>
+    <div class="qtext"><strong>"เมื่อวานฉันดูภาพยนตร์กับเพื่อน"</strong></div>
+    <div class="hint-box">💡 โครงสร้าง: きのう [คน]と [สิ่ง]を [กริยา]ました</div>
+    <textarea class="write-area" placeholder="เขียนภาษาญี่ปุ่น..."></textarea>
+    <button class="reveal-btn" onclick="rev('wa2')">ดูเฉลย</button>
+    <div class="ans-box" id="wa2">✅ きのう ともだちと えいがを みました。</div>
+  </div>
+
+  <div class="card orange">
+    <div class="qnum">ข้อ 3 — การเดินทาง</div>
+    <div class="qtext"><strong>"พรุ่งนี้จะไปโตเกียวโดยรถไฟชิงกันเซน"</strong></div>
+    <div class="hint-box">💡 โครงสร้าง: あした [ยานพาหนะ]で [สถานที่]へ いきます</div>
+    <textarea class="write-area" placeholder="เขียนภาษาญี่ปุ่น..."></textarea>
+    <button class="reveal-btn" onclick="rev('wa3')">ดูเฉลย</button>
+    <div class="ans-box" id="wa3">✅ あした しんかんせんで とうきょうへ いきます。</div>
+  </div>
+
+  <div class="card orange">
+    <div class="qnum">ข้อ 4 — วันเดือนปี</div>
+    <div class="qtext"><strong>"วันเกิดของฉันคือวันที่ 20 พฤษภาคม"</strong></div>
+    <div class="hint-box">💡 5月 = ごがつ | 20日 = はつか | โครงสร้าง: わたしの たんじょうびは ～月 ～日 です</div>
+    <textarea class="write-area" placeholder="เขียนภาษาญี่ปุ่น..."></textarea>
+    <button class="reveal-btn" onclick="rev('wa4')">ดูเฉลย</button>
+    <div class="ans-box" id="wa4">✅ わたしの たんじょうびは ５月 ２０日 です。<br>อ่านว่า: ごがつ はつか</div>
+  </div>
+
+  <div class="card orange">
+    <div class="qnum">ข้อ 5 — ช่วงเวลาเปิด-ปิด</div>
+    <div class="qtext"><strong>"ห้องสมุดเปิดตั้งแต่วันจันทร์ถึงวันศุกร์"</strong></div>
+    <div class="hint-box">💡 月曜日 = げつようび | 金曜日 = きんようび | ～から ～まで です</div>
+    <textarea class="write-area" placeholder="เขียนภาษาญี่ปุ่น..."></textarea>
+    <button class="reveal-btn" onclick="rev('wa5')">ดูเฉลย</button>
+    <div class="ans-box" id="wa5">✅ としょかんは げつようびから きんようびまで です。</div>
+  </div>
+
+  <div class="card orange">
+    <div class="qnum">ข้อ 6 — กิจวัตรประจำวัน</div>
+    <div class="qtext"><strong>"ทุกเช้าฉันกินขนมปังและดื่มกาแฟ"</strong></div>
+    <div class="hint-box">💡 まいあさ ～と～ | パン = ขนมปัง | コーヒー = กาแฟ</div>
+    <textarea class="write-area" placeholder="เขียนภาษาญี่ปุ่น..."></textarea>
+    <button class="reveal-btn" onclick="rev('wa6')">ดูเฉลย</button>
+    <div class="ans-box" id="wa6">✅ まいあさ パンを たべて、コーヒーを のみます。<br>หรือ: まいあさ パンと コーヒーを のみます。(ย่อ)</div>
+  </div>
+
+  <div class="card orange">
+    <div class="qnum">ข้อ 7 — ชวนทำกิจกรรม</div>
+    <div class="qtext"><strong>"ไปกินข้าวกลางวันด้วยกันไหม?"</strong></div>
+    <div class="hint-box">💡 ใช้ ～ませんか เพื่อชวน | ひるごはん = อาหารกลางวัน</div>
+    <textarea class="write-area" placeholder="เขียนภาษาญี่ปุ่น..."></textarea>
+    <button class="reveal-btn" onclick="rev('wa7')">ดูเฉลย</button>
+    <div class="ans-box" id="wa7">✅ いっしょに ひるごはんを たべませんか。</div>
+  </div>
+
+  <div class="card orange">
+    <div class="qnum">ข้อ 8 — บอกเวลาทำกิจกรรม</div>
+    <div class="qtext"><strong>"ทุกวันอาทิตย์ฉันเรียนภาษาญี่ปุ่นตั้งแต่ 9 โมงถึงบ่าย 3 โมง"</strong></div>
+    <div class="hint-box">💡 にちようびに / ９時から ３時まで / にほんごを べんきょうします</div>
+    <textarea class="write-area" placeholder="เขียนภาษาญี่ปุ่น..."></textarea>
+    <button class="reveal-btn" onclick="rev('wa8')">ดูเฉลย</button>
+    <div class="ans-box" id="wa8">✅ まいにちようびに ９時から ３時まで にほんごを べんきょうします。<br>หรือ: にちようびに ９時から ３時まで にほんごを べんきょうします。</div>
+  </div>
+
+  <div class="card orange">
+    <div class="qnum">ข้อ 9 — สัปดาห์ที่แล้ว</div>
+    <div class="qtext"><strong>"สัปดาห์ที่แล้วฉันกลับบ้านโดยแท็กซี่คนเดียว"</strong></div>
+    <div class="hint-box">💡 せんしゅう / タクシーで / ひとりで / うちへ かえりました</div>
+    <textarea class="write-area" placeholder="เขียนภาษาญี่ปุ่น..."></textarea>
+    <button class="reveal-btn" onclick="rev('wa9')">ดูเฉลย</button>
+    <div class="ans-box" id="wa9">✅ せんしゅう タクシーで ひとりで うちへ かえりました。</div>
+  </div>
+
+  <div class="card orange">
+    <div class="qnum">ข้อ 10 — วันที่ + กิจกรรม</div>
+    <div class="qtext"><strong>"เดือนหน้าวันที่ 14 ฉันจะไปญี่ปุ่นกับครอบครัว"</strong></div>
+    <div class="hint-box">💡 らいげつ / 14日 = じゅうよっか / かぞくと / にほんへ いきます</div>
+    <textarea class="write-area" placeholder="เขียนภาษาญี่ปุ่น..."></textarea>
+    <button class="reveal-btn" onclick="rev('wa10')">ดูเฉลย</button>
+    <div class="ans-box" id="wa10">✅ らいげつ じゅうよっかに かぞくと にほんへ いきます。</div>
+  </div>
+</div>
+
+<script>
+// Vocab1 flash card pool — บทที่ 4–6 みんなの日本語
+const vocab1Pool = [
+  // บทที่ 4 — กริยา
+  {jp:'おきます',       hint:'',      th:'ตื่นนอน',             acc:['ตื่นนอน']},
+  {jp:'ねます',         hint:'',      th:'นอน',                 acc:['นอน','เข้านอน']},
+  {jp:'はたらきます',   hint:'',      th:'ทำงาน',               acc:['ทำงาน']},
+  {jp:'やすみます',     hint:'休みます', th:'พัก',              acc:['พัก','หยุดพัก','พักผ่อน']},
+  {jp:'べんきょうします',hint:'',     th:'เรียน',               acc:['เรียน','ศึกษา']},
+  {jp:'おわります',     hint:'',      th:'เลิก',                acc:['เลิก','เสร็จ']},
+  // บทที่ 4 — สถานที่
+  {jp:'デパート',       hint:'',      th:'ห้างสรรพสินค้า',       acc:['ห้างสรรพสินค้า','ห้าง']},
+  {jp:'ぎんこう',       hint:'',      th:'ธนาคาร',              acc:['ธนาคาร']},
+  {jp:'ゆうびんきょく', hint:'',      th:'ที่ทำการไปรษณีย์',    acc:['ที่ทำการไปรษณีย์','ไปรษณีย์']},
+  {jp:'としょかん',     hint:'',      th:'ห้องสมุด',            acc:['ห้องสมุด']},
+  {jp:'びじゅつかん',   hint:'',      th:'หอศิลป์',             acc:['หอศิลป์','พิพิธภัณฑ์ศิลปะ']},
+  // บทที่ 4 — เวลา/ช่วงเวลา
+  {jp:'いま',           hint:'今',    th:'ตอนนี้',              acc:['ตอนนี้','ขณะนี้','เดี๋ยวนี้']},
+  {jp:'ごぜん',         hint:'',      th:'ก่อนเที่ยง',          acc:['ก่อนเที่ยง','ช่วงเช้า']},
+  {jp:'ごご',           hint:'',      th:'หลังเที่ยง',          acc:['หลังเที่ยง','ช่วงบ่าย']},
+  {jp:'あさ',           hint:'',      th:'เช้า',                acc:['เช้า']},
+  {jp:'ひる',           hint:'',      th:'กลางวัน',             acc:['กลางวัน','เที่ยง']},
+  {jp:'よる',           hint:'',      th:'กลางคืน',             acc:['กลางคืน','ตอนเย็น','ตอนค่ำ']},
+  {jp:'おととい',       hint:'',      th:'เมื่อวานซืน',         acc:['เมื่อวานซืน']},
+  {jp:'きのう',         hint:'',      th:'เมื่อวานนี้',         acc:['เมื่อวานนี้','เมื่อวาน']},
+  {jp:'きょう',         hint:'今日',  th:'วันนี้',              acc:['วันนี้']},
+  {jp:'あした',         hint:'',      th:'พรุ่งนี้',            acc:['พรุ่งนี้']},
+  {jp:'あさって',       hint:'',      th:'มะรืนนี้',            acc:['มะรืนนี้']},
+  {jp:'けさ',           hint:'',      th:'เมื่อเช้า',           acc:['เมื่อเช้า']},
+  {jp:'こんばん',       hint:'',      th:'เย็นนี้',             acc:['เย็นนี้','คืนนี้']},
+  {jp:'やすみ',         hint:'休み',  th:'วันหยุด',             acc:['วันหยุด','วันพัก']},
+  {jp:'ひるやすみ',     hint:'',      th:'พักกลางวัน',          acc:['พักกลางวัน','พักเที่ยง']},
+  {jp:'まいあさ',       hint:'',      th:'ทุกเช้า',             acc:['ทุกเช้า']},
+  {jp:'まいばん',       hint:'',      th:'ทุกคืน',              acc:['ทุกคืน']},
+  {jp:'まいにち',       hint:'',      th:'ทุกวัน',              acc:['ทุกวัน']},
+  // บทที่ 4 — วันในสัปดาห์
+  {jp:'にちようび',     hint:'',      th:'วันอาทิตย์',          acc:['วันอาทิตย์']},
+  {jp:'げつようび',     hint:'',      th:'วันจันทร์',           acc:['วันจันทร์']},
+  {jp:'かようび',       hint:'',      th:'วันอังคาร',           acc:['วันอังคาร']},
+  {jp:'すいようび',     hint:'',      th:'วันพุธ',              acc:['วันพุธ']},
+  {jp:'もくようび',     hint:'',      th:'วันพฤหัสบดี',         acc:['วันพฤหัสบดี','วันพฤหัส']},
+  {jp:'きんようび',     hint:'',      th:'วันศุกร์',            acc:['วันศุกร์']},
+  {jp:'どようび',       hint:'',      th:'วันเสาร์',            acc:['วันเสาร์']},
+  // บทที่ 4 — อื่นๆ
+  {jp:'しけん',         hint:'',      th:'การสอบ',              acc:['การสอบ','ข้อสอบ']},
+  {jp:'かいぎ',         hint:'',      th:'การประชุม',           acc:['การประชุม']},
+  {jp:'えいが',         hint:'',      th:'ภาพยนตร์',            acc:['ภาพยนตร์','หนัง']},
+  // บทที่ 5 — กริยา
+  {jp:'いきます',       hint:'',      th:'ไป',                  acc:['ไป']},
+  {jp:'きます',         hint:'',      th:'มา',                  acc:['มา']},
+  {jp:'かえります',     hint:'',      th:'กลับ',                acc:['กลับ','กลับบ้าน']},
+  // บทที่ 5 — สถานที่/ยานพาหนะ
+  {jp:'がっこう',       hint:'',      th:'โรงเรียน',            acc:['โรงเรียน']},
+  {jp:'スーパー',       hint:'',      th:'ซูเปอร์มาร์เก็ต',     acc:['ซูเปอร์มาร์เก็ต']},
+  {jp:'えき',           hint:'',      th:'สถานีรถไฟ',           acc:['สถานีรถไฟ','สถานี']},
+  {jp:'ひこうき',       hint:'',      th:'เครื่องบิน',          acc:['เครื่องบิน']},
+  {jp:'ふね',           hint:'',      th:'เรือ',                acc:['เรือ']},
+  {jp:'でんしゃ',       hint:'',      th:'รถไฟฟ้า',             acc:['รถไฟฟ้า','รถไฟ']},
+  {jp:'ちかてつ',       hint:'',      th:'รถไฟใต้ดิน',          acc:['รถไฟใต้ดิน']},
+  {jp:'しんかんせん',   hint:'',      th:'รถไฟชิงกันเซน',       acc:['รถไฟชิงกันเซน','ชิงกันเซน']},
+  {jp:'バス',           hint:'',      th:'รถบัส',               acc:['รถบัส','รถเมล์']},
+  {jp:'タクシー',       hint:'',      th:'รถแท็กซี่',           acc:['รถแท็กซี่','แท็กซี่']},
+  {jp:'じてんしゃ',     hint:'',      th:'จักรยาน',             acc:['จักรยาน']},
+  {jp:'あるいて',       hint:'',      th:'เดิน',                acc:['เดิน']},
+  // บทที่ 5 — บุคคล
+  {jp:'ひと',           hint:'人',    th:'คน',                  acc:['คน']},
+  {jp:'ともだち',       hint:'',      th:'เพื่อน',              acc:['เพื่อน']},
+  {jp:'かれ',           hint:'',      th:'เขา (ผู้ชาย)',         acc:['เขา','แฟน']},
+  {jp:'かのじょ',       hint:'',      th:'เธอ (ผู้หญิง)',        acc:['เธอ','เขา','แฟน']},
+  {jp:'かぞく',         hint:'',      th:'ครอบครัว',            acc:['ครอบครัว']},
+  {jp:'ひとりで',       hint:'',      th:'คนเดียว',             acc:['คนเดียว']},
+  // บทที่ 5 — ช่วงเวลา
+  {jp:'せんしゅう',     hint:'',      th:'สัปดาห์ที่แล้ว',      acc:['สัปดาห์ที่แล้ว','อาทิตย์ที่แล้ว']},
+  {jp:'こんしゅう',     hint:'',      th:'สัปดาห์นี้',          acc:['สัปดาห์นี้','อาทิตย์นี้']},
+  {jp:'らいしゅう',     hint:'',      th:'สัปดาห์หน้า',         acc:['สัปดาห์หน้า','อาทิตย์หน้า']},
+  {jp:'せんげつ',       hint:'',      th:'เดือนที่แล้ว',        acc:['เดือนที่แล้ว']},
+  {jp:'こんげつ',       hint:'今月',  th:'เดือนนี้',            acc:['เดือนนี้']},
+  {jp:'らいげつ',       hint:'',      th:'เดือนหน้า',           acc:['เดือนหน้า']},
+  {jp:'きょねん',       hint:'',      th:'ปีที่แล้ว',           acc:['ปีที่แล้ว']},
+  {jp:'ことし',         hint:'',      th:'ปีนี้',               acc:['ปีนี้']},
+  {jp:'らいねん',       hint:'',      th:'ปีหน้า',              acc:['ปีหน้า']},
+  {jp:'いつ',           hint:'',      th:'เมื่อไร',             acc:['เมื่อไร','เมื่อไหร่']},
+  {jp:'たんじょうび',   hint:'',      th:'วันเกิด',             acc:['วันเกิด']},
+  // บทที่ 6 — กริยา
+  {jp:'たべます',       hint:'',      th:'กิน',                 acc:['กิน','รับประทาน']},
+  {jp:'のみます',       hint:'',      th:'ดื่ม',                acc:['ดื่ม']},
+  {jp:'すいます',       hint:'',      th:'สูบ',                 acc:['สูบ']},
+  {jp:'みます',         hint:'',      th:'ดู',                  acc:['ดู','มอง']},
+  {jp:'ききます',       hint:'',      th:'ฟัง',                 acc:['ฟัง','ได้ยิน']},
+  {jp:'よみます',       hint:'',      th:'อ่าน',                acc:['อ่าน']},
+  {jp:'かきます',       hint:'',      th:'เขียน',               acc:['เขียน']},
+  {jp:'かいます',       hint:'',      th:'ซื้อ',                acc:['ซื้อ']},
+  {jp:'とります',       hint:'',      th:'ถ่าย (รูป)',           acc:['ถ่าย','ถ่ายรูป']},
+  {jp:'します',         hint:'',      th:'ทำ',                  acc:['ทำ','เล่น']},
+  {jp:'あいます',       hint:'',      th:'พบ',                  acc:['พบ','เจอ']},
+  // บทที่ 6 — อาหาร/เครื่องดื่ม
+  {jp:'ごはん',         hint:'',      th:'ข้าว',                acc:['ข้าว','อาหาร']},
+  {jp:'あさごはん',     hint:'',      th:'อาหารเช้า',           acc:['อาหารเช้า']},
+  {jp:'ひるごはん',     hint:'',      th:'อาหารกลางวัน',        acc:['อาหารกลางวัน']},
+  {jp:'ばんごはん',     hint:'',      th:'อาหารเย็น',           acc:['อาหารเย็น']},
+  {jp:'パン',           hint:'',      th:'ขนมปัง',              acc:['ขนมปัง']},
+  {jp:'たまご',         hint:'',      th:'ไข่',                 acc:['ไข่']},
+  {jp:'にく',           hint:'',      th:'เนื้อ',               acc:['เนื้อ','เนื้อสัตว์']},
+  {jp:'さかな',         hint:'',      th:'ปลา',                 acc:['ปลา']},
+  {jp:'やさい',         hint:'',      th:'ผัก',                 acc:['ผัก']},
+  {jp:'くだもの',       hint:'',      th:'ผลไม้',               acc:['ผลไม้']},
+  {jp:'みず',           hint:'水',    th:'น้ำ',                 acc:['น้ำ']},
+  {jp:'おちゃ',         hint:'',      th:'ชา',                  acc:['ชา','น้ำชา']},
+  {jp:'こうちゃ',       hint:'',      th:'ชาฝรั่ง',             acc:['ชาฝรั่ง']},
+  {jp:'ぎゅうにゅう',   hint:'',      th:'นม',                  acc:['นม']},
+  {jp:'ジュース',       hint:'',      th:'น้ำผลไม้',            acc:['น้ำผลไม้']},
+  {jp:'ビール',         hint:'',      th:'เบียร์',              acc:['เบียร์']},
+  {jp:'おさけ',         hint:'',      th:'สุรา',                acc:['สุรา','เหล้า']},
+  {jp:'たばこ',         hint:'',      th:'บุหรี่',              acc:['บุหรี่']},
+  // บทที่ 6 — สิ่งของ/กิจกรรม
+  {jp:'てがみ',         hint:'',      th:'จดหมาย',              acc:['จดหมาย']},
+  {jp:'レポート',       hint:'',      th:'รายงาน',              acc:['รายงาน']},
+  {jp:'しゃしん',       hint:'',      th:'รูปถ่าย',             acc:['รูปถ่าย','รูปภาพ']},
+  {jp:'ビデオ',         hint:'',      th:'วิดีโอ',              acc:['วิดีโอ']},
+  {jp:'みせ',           hint:'',      th:'ร้านค้า',             acc:['ร้านค้า','ร้าน']},
+  {jp:'にわ',           hint:'',      th:'สวน',                 acc:['สวน']},
+  {jp:'しゅくだい',     hint:'',      th:'การบ้าน',             acc:['การบ้าน']},
+  {jp:'テニス',         hint:'',      th:'เทนนิส',              acc:['เทนนิส']},
+  {jp:'サッカー',       hint:'',      th:'ฟุตบอล',              acc:['ฟุตบอล']},
+  {jp:'はなみ',         hint:'',      th:'การชมดอกซากุระ',      acc:['การชมดอกซากุระ','ชมดอกซากุระ']},
+  // บทที่ 6 — คำวิเศษณ์
+  {jp:'いっしょに',     hint:'',      th:'ด้วยกัน',             acc:['ด้วยกัน','พร้อมกัน']},
+  {jp:'ちょっと',       hint:'',      th:'นิดหน่อย',            acc:['นิดหน่อย','สักครู่','เล็กน้อย']},
+  {jp:'いつも',         hint:'',      th:'เสมอ',                acc:['เสมอ','เป็นประจำ']},
+  {jp:'ときどき',       hint:'時々',  th:'บางครั้ง',            acc:['บางครั้ง','บางที']},
+  {jp:'それから',       hint:'',      th:'หลังจากนั้น',         acc:['หลังจากนั้น','ต่อจากนั้น']},
+];
+
+let v1Queue = [], v1Idx = 0, v1Answered = false;
+
+function initVocab1() {
+  v1Queue = [...vocab1Pool].sort(() => Math.random() - 0.5);
+  v1Idx = 0;
+  v1Answered = false;
+  S.vocab1 = {c:0, t:0, done:new Set()};
+  updScore('vocab1');
+  document.getElementById('vocab1-done').style.display = 'none';
+  document.getElementById('vocab1-card').style.display = 'block';
+  showV1Question();
+}
+
+function showV1Question() {
+  const item = v1Queue[v1Idx];
+  const total = v1Queue.length;
+  document.getElementById('vocab1-qnum').textContent = 'ข้อ ' + (v1Idx + 1) + '/' + total;
+  const wordEl = document.getElementById('vocab1-word');
+  if (item.hint) {
+    wordEl.innerHTML = item.jp + ' <span class="hint" style="font-size:1rem">' + item.hint + '</span>';
+  } else {
+    wordEl.textContent = item.jp;
+  }
+  const inp = document.getElementById('vocab1-inp');
+  inp.value = '';
+  inp.className = 'txt-inp';
+  inp.disabled = false;
+  document.getElementById('vocab1-fb').textContent = '';
+  document.getElementById('vocab1-fb').className = 'fb';
+  document.getElementById('vocab1-check').style.display = 'inline-block';
+  document.getElementById('vocab1-check').disabled = false;
+  document.getElementById('vocab1-next').style.display = 'none';
+  v1Answered = false;
+  inp.focus();
+}
+
+function chkVocab1() {
+  if (v1Answered) return;
+  const inp = document.getElementById('vocab1-inp');
+  const val = inp.value.trim();
+  if (!val) return;
+  const item = v1Queue[v1Idx];
+  const ok = item.acc.includes(val);
+  v1Answered = true;
+  S.vocab1.t++;
+  const fb = document.getElementById('vocab1-fb');
+  if (ok) {
+    S.vocab1.c++;
+    inp.classList.add('correct');
+    fb.className = 'fb correct';
+    fb.textContent = '✓ ถูกต้อง!';
+  } else {
+    inp.classList.add('wrong');
+    fb.className = 'fb wrong';
+    fb.textContent = '✗ เฉลย: ' + item.th;
+  }
+  inp.disabled = true;
+  document.getElementById('vocab1-check').style.display = 'none';
+  document.getElementById('vocab1-next').style.display = 'inline-block';
+  updScore('vocab1');
+}
+
+function nextVocab1() {
+  v1Idx++;
+  if (v1Idx >= v1Queue.length) {
+    document.getElementById('vocab1-card').style.display = 'none';
+    document.getElementById('vocab1-done').style.display = 'block';
+    document.getElementById('vocab1-final').textContent =
+      'คะแนน: ' + S.vocab1.c + '/' + S.vocab1.t + ' คำ';
+    return;
+  }
+  showV1Question();
+}
+
+function resetVocab1() { initVocab1(); }
+
+// Score state
+const S = {
+  vocab1:     {c:0,t:0,done:new Set()},
+  vocab2:     {c:0,t:0,done:new Set()},
+  vocab3:     {c:0,t:0,done:new Set()},
+  sentence:   {c:0,t:0,done:new Set()},
+  particle:   {c:0,t:0,done:new Set()},
+  expression: {c:0,t:0,done:new Set()}
+};
+
+function getSec(id) {
+  if(id.startsWith('vq')) {
+    const n = parseInt(id.replace('vq',''));
+    if(n <= 10) return 'vocab1';
+    if(n <= 16) return 'vocab2';
+    return 'vocab3';
+  }
+  if(id.startsWith('sq')) return 'sentence';
+  if(id.startsWith('pq')) return 'particle';
+  if(id.startsWith('eq')) return 'expression';
+  return null;
+}
+
+function updScore(sec) {
+  const s = S[sec];
+  const el = document.getElementById(sec+'-score');
+  const bar = document.getElementById(sec+'-prog');
+  if(el) el.textContent = s.c+'/'+s.t;
+  if(bar && s.t>0) bar.style.width=(s.c/s.t*100)+'%';
+}
+
+function showTab(id, btn) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function mc(qid, btn, correct) {
+  const sec = getSec(qid);
+  if(S[sec].done.has(qid)) return;
+  S[sec].done.add(qid); S[sec].t++;
+  if(correct) {
+    S[sec].c++;
+    btn.classList.add('correct');
+    btn.textContent = '✓ ' + btn.textContent;
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#'+qid+' .opt').forEach(b=>{
+      if(b!==btn) b.classList.add('show-right');
+    });
+  }
+  document.querySelectorAll('#'+qid+' .opt').forEach(b=>b.disabled=true);
+  updScore(sec);
+}
+
+function chkTxt(qid, correct, accepted) {
+  const sec = getSec(qid);
+  if(S[sec].done.has(qid)) return;
+  const inp = document.getElementById(qid+'-i');
+  const fb  = document.getElementById(qid+'-fb');
+  const val = inp.value.trim();
+  if(!val) return;
+  S[sec].done.add(qid); S[sec].t++;
+  const ok = accepted.some(a=>a.toLowerCase()===val.toLowerCase());
+  if(ok) {
+    S[sec].c++;
+    inp.classList.add('correct');
+    fb.className='fb correct'; fb.textContent='✓ ถูกต้อง!';
+  } else {
+    inp.classList.add('wrong');
+    fb.className='fb wrong'; fb.textContent='✗ เฉลย: '+correct;
+  }
+  inp.disabled=true;
+  const cb=inp.parentElement.querySelector('.check-btn');
+  if(cb) cb.disabled=true;
+  updScore(sec);
+}
+
+function chkP(qid, correct, accepted) {
+  const sec = getSec(qid);
+  if(S[sec].done.has(qid)) return;
+  const inp = document.getElementById(qid+'-i');
+  const fb  = document.getElementById(qid+'-fb');
+  const val = inp.value.trim();
+  if(!val) return;
+  S[sec].done.add(qid); S[sec].t++;
+  const ok = accepted.includes(val);
+  if(ok) {
+    S[sec].c++;
+    inp.classList.add('correct');
+    fb.className='fb correct'; fb.textContent='✓ ถูกต้อง!';
+  } else {
+    inp.classList.add('wrong');
+    fb.className='fb wrong'; fb.textContent='✗ เฉลย: '+correct;
+  }
+  inp.disabled=true;
+  updScore(sec);
+}
+
+function chkP2(qid, c1, c2, a1, a2) {
+  const sec = getSec(qid);
+  if(S[sec].done.has(qid)) return;
+  const i1=document.getElementById(qid+'-i'), i2=document.getElementById(qid+'-i2');
+  const fb=document.getElementById(qid+'-fb');
+  const v1=i1.value.trim(), v2=i2.value.trim();
+  if(!v1||!v2) return;
+  S[sec].done.add(qid); S[sec].t++;
+  const ok1=a1.includes(v1), ok2=a2.includes(v2);
+  if(ok1&&ok2) {
+    S[sec].c++;
+    i1.classList.add('correct'); i2.classList.add('correct');
+    fb.className='fb correct'; fb.textContent='✓ ถูกต้อง!';
+  } else {
+    i1.classList.add(ok1?'correct':'wrong');
+    i2.classList.add(ok2?'correct':'wrong');
+    fb.className='fb wrong'; fb.textContent='✗ เฉลย: '+c1+' / '+c2;
+  }
+  i1.disabled=true; i2.disabled=true;
+  updScore(sec);
+}
+
+function vf(qid, btn, correct) {
+  const sec = getSec(qid);
+  if(S[sec].done.has(qid)) return;
+  S[sec].done.add(qid); S[sec].t++;
+  const fb=document.getElementById(qid+'-fb');
+  document.querySelectorAll('#'+qid+'-o .vopt').forEach(b=>b.disabled=true);
+  if(correct) {
+    S[sec].c++;
+    btn.classList.add('correct');
+    fb.className='fb correct'; fb.textContent='✓ ถูกต้อง!';
+  } else {
+    btn.classList.add('wrong');
+    fb.className='fb wrong'; fb.textContent='✗ ลองดูรูปแบบกริยาอีกครั้ง';
+  }
+  updScore(sec);
+}
+
+function rev(id) {
+  const el=document.getElementById(id);
+  el.style.display=el.style.display==='block'?'none':'block';
+}
+
+initVocab1();
+
+function resetTab(sec) {
+  S[sec]={c:0,t:0,done:new Set()};
+  updScore(sec);
+  const tabId = sec;
+  const tab=document.getElementById(tabId);
+  tab.querySelectorAll('.opt').forEach(b=>{
+    b.disabled=false; b.className='opt';
+    if(b.textContent.startsWith('✓ ')) b.textContent=b.textContent.slice(2);
+  });
+  tab.querySelectorAll('.txt-inp,.blank-inp').forEach(i=>{
+    i.disabled=false; i.value=''; i.className=i.classList.contains('blank-inp')?'blank-inp':'txt-inp';
+  });
+  tab.querySelectorAll('.fb').forEach(f=>{f.textContent='';f.className='fb';});
+  tab.querySelectorAll('.vopt').forEach(b=>{b.disabled=false;b.className='vopt';});
+  tab.querySelectorAll('.check-btn').forEach(b=>b.disabled=false);
+  tab.querySelectorAll('.ans-box').forEach(b=>b.style.display='none');
+}
+</script>
+</body>
+</html>
